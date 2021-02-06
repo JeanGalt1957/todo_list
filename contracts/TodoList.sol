@@ -12,6 +12,17 @@ contract TodoList { //contract must be lower case!
 
     mapping(uint => Task) public tasks;
 
+    event TaskCreated(
+            uint id,
+            string content,
+            bool completed
+    );
+
+    event TaskCompleted(
+        uint id,
+        bool completed
+    );
+
     constructor() public { //herein is a default taks for testing
         createTask("Check out this task");
     }
@@ -19,7 +30,23 @@ contract TodoList { //contract must be lower case!
     function createTask(string memory _content) public { //puts the task inside of the Task struct mapping
             taskCount ++;
             tasks[taskCount] = Task(taskCount, _content, false); //1, 2, 3 correspend with struct data
+            emit TaskCreated(taskCount, _content, false);
+
     }
+
+  function toggleCompleted(uint _id) public {
+    Task memory _task = tasks[_id];
+    _task.completed = !_task.completed;
+    tasks[_id] = _task;
+    emit TaskCompleted(_id, _task.completed);
+  }
+
+
+
+
+
+
+
 
 }
 
